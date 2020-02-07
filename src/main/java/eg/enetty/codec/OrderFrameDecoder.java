@@ -1,4 +1,4 @@
-package eg.enetty;
+package eg.enetty.codec;
 
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 
