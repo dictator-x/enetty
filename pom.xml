@@ -111,6 +111,7 @@
           </executions>
           <configuration>
             <mainClass>eg.enetty.ServerApp</mainClass>
+            <!-- <mainClass>eg.enetty.ServerApp</mainClass> -->
           </configuration>
         </plugin>
         <plugin>
