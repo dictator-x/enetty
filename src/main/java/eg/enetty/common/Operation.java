@@ -1,6 +1,6 @@
 package eg.enetty.common;
 
-public abstract class Operation extends Message {
+public abstract class Operation extends MessageBody {
 
     public abstract OperationResult execute();
 

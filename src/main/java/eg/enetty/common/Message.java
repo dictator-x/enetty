@@ -1,11 +1,12 @@
 package eg.enetty.common;
 
 import io.netty.buffer.ByteBuf;
-
 import java.nio.charset.Charset;
-
 import eg.enetty.util.JsonUtil;
 
+import lombok.Data;
+
+@Data
 public abstract class Message<T extends MessageBody> {
 
     private MessageHeader messageHeader;
