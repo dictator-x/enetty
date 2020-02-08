@@ -1,4 +1,4 @@
-package eg.enetty.aa;
+package eg.enetty.common;
 
 /**
  * Hello world!
