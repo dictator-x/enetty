@@ -14,7 +14,6 @@ public class OrderProtocolDecoder extends MessageToMessageDecoder<ByteBuf> {
     protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf, List<Object> out) throws Exception {
         RequestMessage requestMessage = new RequestMessage();
         requestMessage.decode(byteBuf);
-
         out.add(requestMessage);
     }
 }

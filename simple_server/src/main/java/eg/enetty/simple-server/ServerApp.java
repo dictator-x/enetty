@@ -12,6 +12,7 @@ import io.netty.handler.logging.LogLevel;
 
 import eg.enetty.simple_server.codec.*;
 import eg.enetty.simple_server.handler.OrderServerProcessHandler;
+import eg.enetty.simple_server.handler.PipelineExecuteSequenceTestHandler;
 
 import eg.enetty.common.codec.OrderFrameEncoder;
 import eg.enetty.common.codec.OrderFrameDecoder;
@@ -35,12 +36,14 @@ public class ServerApp
             @Override
             protected void initChannel(NioSocketChannel ch) throws Exception {
                 ChannelPipeline pipeline = ch.pipeline();
+                // Decode request.
                 pipeline.addLast(new OrderFrameDecoder());
+                pipeline.addLast(new OrderProtocolDecoder());
+                // Encode response.
                 pipeline.addLast(new OrderFrameEncoder());
                 pipeline.addLast(new OrderProtocolEncoder());
-                pipeline.addLast(new OrderProtocolDecoder());
-                pipeline.addLast(new OrderServerProcessHandler());
                 pipeline.addLast(new LoggingHandler(LogLevel.INFO));
+                pipeline.addLast(new OrderServerProcessHandler());
             }
         });
 
