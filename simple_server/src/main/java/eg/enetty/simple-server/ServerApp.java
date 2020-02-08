@@ -9,10 +9,12 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.logging.LogLevel;
-import eg.enetty.common.App1;
 
 import eg.enetty.simple_server.codec.*;
 import eg.enetty.simple_server.handler.OrderServerProcessHandler;
+
+import eg.enetty.common.codec.OrderFrameEncoder;
+import eg.enetty.common.codec.OrderFrameDecoder;
 
 public class ServerApp
 {

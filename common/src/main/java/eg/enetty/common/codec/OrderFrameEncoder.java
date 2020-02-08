@@ -1,4 +1,4 @@
-package eg.enetty.simple_server.codec;
+package eg.enetty.common.codec;
 
 import io.netty.handler.codec.LengthFieldPrepender;
 
