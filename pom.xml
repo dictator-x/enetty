@@ -34,7 +34,7 @@
 
   <modules>
     <module>simple_server</module>
-    <module>simple-client</module>
+    <module>simple_client</module>
     <module>common</module>
   </modules>
 
