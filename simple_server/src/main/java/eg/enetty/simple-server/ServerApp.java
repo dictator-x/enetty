@@ -35,12 +35,12 @@ public class ServerApp
             @Override
             protected void initChannel(NioSocketChannel ch) throws Exception {
                 ChannelPipeline pipeline = ch.pipeline();
-                pipeline.addLast(new LoggingHandler(LogLevel.INFO));
                 pipeline.addLast(new OrderFrameDecoder());
                 pipeline.addLast(new OrderFrameEncoder());
                 pipeline.addLast(new OrderProtocolEncoder());
                 pipeline.addLast(new OrderProtocolDecoder());
                 pipeline.addLast(new OrderServerProcessHandler());
+                pipeline.addLast(new LoggingHandler(LogLevel.INFO));
             }
         });
 

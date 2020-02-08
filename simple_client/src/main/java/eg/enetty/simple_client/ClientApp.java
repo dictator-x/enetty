@@ -47,7 +47,6 @@ public class ClientApp
         RequestMessage requestMessage = new RequestMessage(IdUtil.nextId(), new OrderOperation(1001, "lala"));
         ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 8090);
         channelFuture.sync();
-        channelFuture.channel().closeFuture().get();
 
         channelFuture.channel().writeAndFlush(requestMessage);
         channelFuture.channel().closeFuture().get();

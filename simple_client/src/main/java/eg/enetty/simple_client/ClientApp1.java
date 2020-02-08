@@ -35,12 +35,12 @@ public class ClientApp1
             @Override
             protected void initChannel(NioSocketChannel ch) throws Exception {
                 ChannelPipeline pipeline = ch.pipeline();
-                pipeline.addLast(new LoggingHandler(LogLevel.INFO));
                 pipeline.addLast(new OrderFrameDecoder());
                 pipeline.addLast(new OrderFrameEncoder());
                 pipeline.addLast(new OrderProtocolEncoder());
                 pipeline.addLast(new OrderProtocolDecoder());
                 pipeline.addLast(new OperationToRequestMessageEncoder());
+                pipeline.addLast(new LoggingHandler(LogLevel.INFO));
             }
         });
 
@@ -48,7 +48,6 @@ public class ClientApp1
         OrderOperation operation =  new OrderOperation(1001, "lala");
         ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 8090);
         channelFuture.sync();
-        channelFuture.channel().closeFuture().get();
 
         channelFuture.channel().writeAndFlush(operation);
         channelFuture.channel().closeFuture().get();
