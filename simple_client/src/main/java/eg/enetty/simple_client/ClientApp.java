@@ -1,4 +1,4 @@
-package eg.enetty.simple_server;
+package eg.enetty.simple_client;
 
 public class ClientApp
 {
