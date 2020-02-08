@@ -33,7 +33,7 @@
   </dependencies>
 
   <modules>
-    <module>simple-server</module>
+    <module>simple_server</module>
     <module>simple-client</module>
     <module>common</module>
   </modules>
