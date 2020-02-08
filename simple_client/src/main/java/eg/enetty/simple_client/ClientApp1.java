@@ -24,7 +24,7 @@ import java.util.concurrent.ExecutionException;
 public class ClientApp1
 {
     public static void main( String[] args ) throws InterruptedException, ExecutionException {
-        System.out.println("This is Server");
+        System.out.println("This is ClientApp1");
 
         Bootstrap bootstrap = new Bootstrap();
         bootstrap.channel(NioSocketChannel.class);
@@ -40,16 +40,17 @@ public class ClientApp1
                 pipeline.addLast(new OrderFrameEncoder());
                 pipeline.addLast(new OrderProtocolEncoder());
                 pipeline.addLast(new OrderProtocolDecoder());
+                pipeline.addLast(new OperationToRequestMessageEncoder());
             }
         });
 
 
-        RequestMessage requestMessage = new RequestMessage(IdUtil.nextId(), new OrderOperation(1001, "lala"));
+        OrderOperation operation =  new OrderOperation(1001, "lala");
         ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 8090);
         channelFuture.sync();
         channelFuture.channel().closeFuture().get();
 
-        channelFuture.channel().writeAndFlush(requestMessage);
+        channelFuture.channel().writeAndFlush(operation);
         channelFuture.channel().closeFuture().get();
     }
 }

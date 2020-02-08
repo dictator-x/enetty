@@ -29,7 +29,7 @@
           </execution>
         </executions>
         <configuration>
-          <mainClass>eg.enetty.simple_client.ClientApp</mainClass>
+          <!-- <mainClass>eg.enetty.simple_client.ClientApp1</mainClass> -->
         </configuration>
       </plugin>
 

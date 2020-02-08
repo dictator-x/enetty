@@ -24,7 +24,7 @@ import java.util.concurrent.ExecutionException;
 public class ClientApp
 {
     public static void main( String[] args ) throws InterruptedException, ExecutionException {
-        System.out.println("This is Server");
+        System.out.println("This is clientApp");
 
         Bootstrap bootstrap = new Bootstrap();
         bootstrap.channel(NioSocketChannel.class);
