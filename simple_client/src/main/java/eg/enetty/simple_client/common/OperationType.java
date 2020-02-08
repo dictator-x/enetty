@@ -37,7 +37,7 @@ public enum OperationType {
         return operationClass;
     }
 
-    public Class<? extends OperationResult> getOperationResultClas() {
+    public Class<? extends OperationResult> getOperationResultClass() {
         return operationResultClass;
     }
 

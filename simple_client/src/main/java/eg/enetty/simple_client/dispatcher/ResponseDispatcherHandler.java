@@ -9,7 +9,11 @@ public class ResponseDispatcherHandler
     extends SimpleChannelInboundHandler<ResponseMessage>
 {
 
-    RequestPendingCenter center;
+    private RequestPendingCenter center;
+
+    public ResponseDispatcherHandler(RequestPendingCenter requestPendingCenter) {
+        center = requestPendingCenter;
+    }
 
     @Override
     protected void channelRead0(
