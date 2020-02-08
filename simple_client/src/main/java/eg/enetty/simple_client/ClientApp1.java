@@ -21,7 +21,7 @@ import eg.enetty.simple_client.common.order.OrderOperation;
 
 import java.util.concurrent.ExecutionException;
 
-public class ClientApp
+public class ClientApp1
 {
     public static void main( String[] args ) throws InterruptedException, ExecutionException {
         System.out.println("This is Server");
