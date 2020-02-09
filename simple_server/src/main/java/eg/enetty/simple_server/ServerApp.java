@@ -8,9 +8,11 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioChannelOption;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.flush.FlushConsolidationHandler;
+import io.netty.handler.traffic.GlobalTrafficShapingHandler;
 
 import io.netty.util.concurrent.UnorderedThreadPoolEventExecutor;
 import io.netty.util.concurrent.DefaultThreadFactory;
@@ -47,12 +49,16 @@ public class ServerApp
         MetricHandler metricHandler = new MetricHandler();
         UnorderedThreadPoolEventExecutor businessEventExecutor = new UnorderedThreadPoolEventExecutor(10, new DefaultThreadFactory("business"));
 
+        GlobalTrafficShapingHandler globalTrafficShapingHandler = new GlobalTrafficShapingHandler(new NioEventLoopGroup(), 100*1024*1024, 100*1024*1024);
+
         serverBootstrap.childHandler(new ChannelInitializer<NioSocketChannel>() {
             @Override
             protected void initChannel(NioSocketChannel ch) throws Exception {
                 ChannelPipeline pipeline = ch.pipeline();
-                // Decode request.
+                // print log in bytes.
                 pipeline.addLast(new LoggingHandler(LogLevel.INFO));
+                pipeline.addLast("TSHandler", globalTrafficShapingHandler);
+                // Decode request.
                 pipeline.addLast(new OrderFrameDecoder());
                 pipeline.addLast(new OrderProtocolDecoder());
                 // Encode response.
