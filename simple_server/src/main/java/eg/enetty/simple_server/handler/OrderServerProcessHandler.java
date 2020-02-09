@@ -2,14 +2,16 @@ package eg.enetty.simple_server.handler;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.buffer.ByteBuf;
 
 import eg.enetty.simple_server.common.*;
+
 
 public class OrderServerProcessHandler extends SimpleChannelInboundHandler<RequestMessage> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RequestMessage msg) throws Exception {
-        // ByteBuf buffer = ctx.alloc().buffer();
+        ByteBuf buffer = ctx.alloc().buffer();
 
         Operation operation = msg.getMessageBody();
         OperationResult operationResult = operation.execute();

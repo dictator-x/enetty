@@ -2,8 +2,10 @@ package eg.enetty.simple_server.common.order;
 
 import eg.enetty.simple_server.common.Operation;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 @Data
+@Slf4j
 public class OrderOperation extends Operation {
 
     private int tableId;
@@ -16,8 +18,8 @@ public class OrderOperation extends Operation {
 
     @Override
     public OrderOperationResult execute() {
-        System.out.println("order's executing with orderRequest: " + toString());
-        System.out.println("order's executing complete");
+        log.info("order's executing with orderRequest: " + toString());
+        log.info("order's executing complete");
         return new OrderOperationResult(tableId, dish, true);
     }
 }

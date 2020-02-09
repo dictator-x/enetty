@@ -20,15 +20,21 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
         <version>1.2.1</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>java</goal>
-            </goals>
-          </execution>
-        </executions>
+        <!-- <executions> -->
+        <!--   <execution> -->
+        <!--     <goals> -->
+        <!--       <goal>java</goal> -->
+        <!--     </goals> -->
+        <!--   </execution> -->
+        <!-- </executions> -->
         <configuration>
-          <mainClass>eg.enetty.simple_server.ServerApp</mainClass>
+          <executable>java</executable>
+          <arguments>
+            <argument>-Dio.netty.leakDetection.level=PARANOID</argument>
+            <argument>-classpath</argument>
+            <classpath />
+            <argument>eg.enetty.simple_server.ServerApp</argument>
+          </arguments>
         </configuration>
       </plugin>
 
