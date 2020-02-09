@@ -2,6 +2,7 @@ package eg.enetty.simple_server.handler;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelDuplexHandler;
+import io.netty.channel.ChannelHandler;
 
 import com.codahale.metrics.ConsoleReporter;
 import com.codahale.metrics.Gauge;
@@ -11,6 +12,7 @@ import com.codahale.metrics.jmx.JmxReporter;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
+@ChannelHandler.Sharable
 public class MetricHandler extends ChannelDuplexHandler {
 
     private AtomicLong totalConnectionNumber = new AtomicLong();

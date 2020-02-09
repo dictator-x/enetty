@@ -17,6 +17,8 @@ import eg.enetty.simple_server.codec.*;
 import eg.enetty.simple_server.handler.OrderServerProcessHandler;
 import eg.enetty.simple_server.handler.PipelineExecuteSequenceTestHandler;
 
+import eg.enetty.simple_server.handler.MetricHandler;
+
 import eg.enetty.common.codec.OrderFrameEncoder;
 import eg.enetty.common.codec.OrderFrameDecoder;
 
@@ -41,6 +43,8 @@ public class ServerApp
         serverBootstrap.childOption(NioChannelOption.TCP_NODELAY, true);
         serverBootstrap.option(NioChannelOption.SO_BACKLOG, 1024);
 
+        MetricHandler metricHandler = new MetricHandler();
+
         serverBootstrap.childHandler(new ChannelInitializer<NioSocketChannel>() {
             @Override
             protected void initChannel(NioSocketChannel ch) throws Exception {
@@ -52,6 +56,9 @@ public class ServerApp
                 // Encode response.
                 pipeline.addLast(new OrderFrameEncoder());
                 pipeline.addLast(new OrderProtocolEncoder());
+                // Metric.
+                pipeline.addLast("metricHandler", metricHandler);
+                // User App.
                 pipeline.addLast(new OrderServerProcessHandler());
             }
         });
