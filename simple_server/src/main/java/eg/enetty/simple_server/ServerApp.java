@@ -11,6 +11,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.logging.LogLevel;
 
+import io.netty.util.concurrent.UnorderedThreadPoolEventExecutor;
 import io.netty.util.concurrent.DefaultThreadFactory;
 
 import eg.enetty.simple_server.codec.*;
@@ -43,6 +44,7 @@ public class ServerApp
         serverBootstrap.option(NioChannelOption.SO_BACKLOG, 1024);
 
         MetricHandler metricHandler = new MetricHandler();
+        UnorderedThreadPoolEventExecutor businessEventExecutor = new UnorderedThreadPoolEventExecutor(10, new DefaultThreadFactory("business"));
 
         serverBootstrap.childHandler(new ChannelInitializer<NioSocketChannel>() {
             @Override
@@ -58,7 +60,7 @@ public class ServerApp
                 // Metric.
                 pipeline.addLast("metricHandler", metricHandler);
                 // User App.
-                pipeline.addLast(new OrderServerProcessHandler());
+                pipeline.addLast(businessEventExecutor, new OrderServerProcessHandler());
             }
         });
 
