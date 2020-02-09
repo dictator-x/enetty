@@ -18,6 +18,9 @@ import eg.enetty.simple_client.common.RequestMessage;
 import eg.enetty.simple_client.util.IdUtil;
 import eg.enetty.simple_client.common.order.OrderOperation;
 
+import eg.enetty.simple_client.handler.KeepaliveHandler;
+import eg.enetty.simple_client.handler.ClientIdleCheckHandler;
+
 import java.util.concurrent.ExecutionException;
 
 public class ClientApp1
@@ -34,12 +37,19 @@ public class ClientApp1
             @Override
             protected void initChannel(NioSocketChannel ch) throws Exception {
                 ChannelPipeline pipeline = ch.pipeline();
+                // Keepalive.
+                pipeline.addLast(new ClientIdleCheckHandler());
+                // Packet decoder.
                 pipeline.addLast(new OrderFrameDecoder());
+                pipeline.addLast(new OrderProtocolDecoder());
+                // Packet encoder.
                 pipeline.addLast(new OrderFrameEncoder());
                 pipeline.addLast(new OrderProtocolEncoder());
-                pipeline.addLast(new OrderProtocolDecoder());
-                pipeline.addLast(new OperationToRequestMessageEncoder());
+                // Log message.
                 pipeline.addLast(new LoggingHandler(LogLevel.INFO));
+
+                pipeline.addLast(new KeepaliveHandler());
+                pipeline.addLast(new OperationToRequestMessageEncoder());
             }
         });
 
