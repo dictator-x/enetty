@@ -9,6 +9,8 @@ public class OrderServerProcessHandler extends SimpleChannelInboundHandler<Reque
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RequestMessage msg) throws Exception {
+        // ByteBuf buffer = ctx.alloc().buffer();
+
         Operation operation = msg.getMessageBody();
         OperationResult operationResult = operation.execute();
 
