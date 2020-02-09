@@ -10,6 +10,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.logging.LogLevel;
+import io.netty.handler.flush.FlushConsolidationHandler;
 
 import io.netty.util.concurrent.UnorderedThreadPoolEventExecutor;
 import io.netty.util.concurrent.DefaultThreadFactory;
@@ -59,6 +60,8 @@ public class ServerApp
                 pipeline.addLast(new OrderProtocolEncoder());
                 // Metric.
                 pipeline.addLast("metricHandler", metricHandler);
+                // flushEnhance
+                pipeline.addLast("flushEnhance", new FlushConsolidationHandler(5, true));
                 // User App.
                 pipeline.addLast(businessEventExecutor, new OrderServerProcessHandler());
             }
