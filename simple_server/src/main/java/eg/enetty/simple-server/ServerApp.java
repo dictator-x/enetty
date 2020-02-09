@@ -11,6 +11,8 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.logging.LogLevel;
 
+import io.netty.util.concurrent.DefaultThreadFactory;
+
 import eg.enetty.simple_server.codec.*;
 import eg.enetty.simple_server.handler.OrderServerProcessHandler;
 import eg.enetty.simple_server.handler.PipelineExecuteSequenceTestHandler;
@@ -31,7 +33,10 @@ public class ServerApp
         // If NioEventLoopGroup does not specify Executor, It will get
         // ThreadPerTaskExecutor as default.
         // Jdk selector is instanced at this point.
-        serverBootstrap.group(new NioEventLoopGroup());
+        serverBootstrap.group(
+            new NioEventLoopGroup(0, new DefaultThreadFactory("Boss")),
+            new NioEventLoopGroup(0, new DefaultThreadFactory("worker"))
+        );
 
         serverBootstrap.childOption(NioChannelOption.TCP_NODELAY, true);
         serverBootstrap.option(NioChannelOption.SO_BACKLOG, 1024);
@@ -41,12 +46,12 @@ public class ServerApp
             protected void initChannel(NioSocketChannel ch) throws Exception {
                 ChannelPipeline pipeline = ch.pipeline();
                 // Decode request.
+                pipeline.addLast(new LoggingHandler(LogLevel.INFO));
                 pipeline.addLast(new OrderFrameDecoder());
                 pipeline.addLast(new OrderProtocolDecoder());
                 // Encode response.
                 pipeline.addLast(new OrderFrameEncoder());
                 pipeline.addLast(new OrderProtocolEncoder());
-                pipeline.addLast(new LoggingHandler(LogLevel.INFO));
                 pipeline.addLast(new OrderServerProcessHandler());
             }
         });
