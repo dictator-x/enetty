@@ -18,9 +18,10 @@ import io.netty.util.concurrent.UnorderedThreadPoolEventExecutor;
 import io.netty.util.concurrent.DefaultThreadFactory;
 
 import eg.enetty.simple_server.codec.*;
-import eg.enetty.simple_server.handler.OrderServerProcessHandler;
 
+import eg.enetty.simple_server.handler.OrderServerProcessHandler;
 import eg.enetty.simple_server.handler.MetricHandler;
+import eg.enetty.simple_server.handler.ServerIdleCheckHandler;
 
 import eg.enetty.common.codec.OrderFrameEncoder;
 import eg.enetty.common.codec.OrderFrameDecoder;
@@ -55,15 +56,18 @@ public class ServerApp
             @Override
             protected void initChannel(NioSocketChannel ch) throws Exception {
                 ChannelPipeline pipeline = ch.pipeline();
-                // print log in bytes.
-                pipeline.addLast(new LoggingHandler(LogLevel.INFO));
+                // Traffic Shaping handler.
                 pipeline.addLast("TSHandler", globalTrafficShapingHandler);
+                // Idle check Handler
+                pipeline.addLast("IdleCheckHandler", new ServerIdleCheckHandler());
                 // Decode request.
                 pipeline.addLast(new OrderFrameDecoder());
                 pipeline.addLast(new OrderProtocolDecoder());
                 // Encode response.
                 pipeline.addLast(new OrderFrameEncoder());
                 pipeline.addLast(new OrderProtocolEncoder());
+                // print log in bytes.
+                pipeline.addLast(new LoggingHandler(LogLevel.INFO));
                 // Metric.
                 pipeline.addLast("metricHandler", metricHandler);
                 // flushEnhance
