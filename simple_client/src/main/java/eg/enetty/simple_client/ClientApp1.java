@@ -33,12 +33,14 @@ public class ClientApp1
 
         bootstrap.group(new NioEventLoopGroup());
 
+        ClientIdleCheckHandler clientIdleCheckHandler = new ClientIdleCheckHandler();
+
         bootstrap.handler(new ChannelInitializer<NioSocketChannel>() {
             @Override
             protected void initChannel(NioSocketChannel ch) throws Exception {
                 ChannelPipeline pipeline = ch.pipeline();
                 // Keepalive.
-                pipeline.addLast(new ClientIdleCheckHandler());
+                pipeline.addLast(clientIdleCheckHandler);
                 // Packet decoder.
                 pipeline.addLast(new OrderFrameDecoder());
                 pipeline.addLast(new OrderProtocolDecoder());
