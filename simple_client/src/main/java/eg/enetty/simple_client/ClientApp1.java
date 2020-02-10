@@ -17,6 +17,7 @@ import eg.enetty.common.codec.OrderFrameDecoder;
 import eg.enetty.simple_client.common.RequestMessage;
 import eg.enetty.simple_client.util.IdUtil;
 import eg.enetty.simple_client.common.order.OrderOperation;
+import eg.enetty.simple_client.common.auth.AuthOperation;
 
 import eg.enetty.simple_client.handler.KeepaliveHandler;
 import eg.enetty.simple_client.handler.ClientIdleCheckHandler;
@@ -55,10 +56,12 @@ public class ClientApp1
             }
         });
 
-
+        AuthOperation authOperation = new AuthOperation("admin", "bbb");
         OrderOperation operation =  new OrderOperation(1001, "lala");
         ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 8090);
         channelFuture.sync();
+
+        channelFuture.channel().writeAndFlush(authOperation);
 
         channelFuture.channel().writeAndFlush(operation);
         channelFuture.channel().closeFuture().get();
