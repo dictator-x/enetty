@@ -22,8 +22,9 @@ import io.netty.util.concurrent.DefaultThreadFactory;
 
 import eg.enetty.simple_server.codec.*;
 
-import eg.enetty.simple_server.handler.OrderServerProcessHandler;
+import eg.enetty.simple_server.handler.AuthHandler;
 import eg.enetty.simple_server.handler.MetricHandler;
+import eg.enetty.simple_server.handler.OrderServerProcessHandler;
 import eg.enetty.simple_server.handler.ServerIdleCheckHandler;
 
 import eg.enetty.common.codec.OrderFrameEncoder;
@@ -53,7 +54,8 @@ public class ServerApp
         MetricHandler metricHandler = new MetricHandler();
         UnorderedThreadPoolEventExecutor businessEventExecutor = new UnorderedThreadPoolEventExecutor(10, new DefaultThreadFactory("business"));
         GlobalTrafficShapingHandler globalTrafficShapingHandler = new GlobalTrafficShapingHandler(new NioEventLoopGroup(), 100*1024*1024, 100*1024*1024);
-        RuleBasedIpFilter ruleBasedIpFilter = new RuleBasedIpFilter(new IpSubnetFilterRule("127.0.0.1", 8, IpFilterRuleType.REJECT));
+        RuleBasedIpFilter ruleBasedIpFilter = new RuleBasedIpFilter(new IpSubnetFilterRule("127.1.0.1", 16, IpFilterRuleType.REJECT));
+        AuthHandler authHandler = new AuthHandler();
 
         serverBootstrap.childHandler(new ChannelInitializer<NioSocketChannel>() {
             @Override
@@ -75,6 +77,8 @@ public class ServerApp
                 pipeline.addLast(new LoggingHandler(LogLevel.INFO));
                 // Metric.
                 pipeline.addLast("metricHandler", metricHandler);
+                // Auth Handler.
+                pipeline.addLast("authHandler", authHandler);
                 // flushEnhance
                 pipeline.addLast("flushEnhance", new FlushConsolidationHandler(5, true));
                 // User App.
