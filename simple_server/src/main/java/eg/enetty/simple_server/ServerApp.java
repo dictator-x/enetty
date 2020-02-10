@@ -13,6 +13,9 @@ import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.flush.FlushConsolidationHandler;
 import io.netty.handler.traffic.GlobalTrafficShapingHandler;
+import io.netty.handler.ipfilter.RuleBasedIpFilter;
+import io.netty.handler.ipfilter.IpSubnetFilterRule;
+import io.netty.handler.ipfilter.IpFilterRuleType;
 
 import io.netty.util.concurrent.UnorderedThreadPoolEventExecutor;
 import io.netty.util.concurrent.DefaultThreadFactory;
@@ -49,13 +52,15 @@ public class ServerApp
 
         MetricHandler metricHandler = new MetricHandler();
         UnorderedThreadPoolEventExecutor businessEventExecutor = new UnorderedThreadPoolEventExecutor(10, new DefaultThreadFactory("business"));
-
         GlobalTrafficShapingHandler globalTrafficShapingHandler = new GlobalTrafficShapingHandler(new NioEventLoopGroup(), 100*1024*1024, 100*1024*1024);
+        RuleBasedIpFilter ruleBasedIpFilter = new RuleBasedIpFilter(new IpSubnetFilterRule("127.0.0.1", 8, IpFilterRuleType.REJECT));
 
         serverBootstrap.childHandler(new ChannelInitializer<NioSocketChannel>() {
             @Override
             protected void initChannel(NioSocketChannel ch) throws Exception {
                 ChannelPipeline pipeline = ch.pipeline();
+                // Ip filer
+                pipeline.addLast("IPFilter", ruleBasedIpFilter);
                 // Traffic Shaping handler.
                 pipeline.addLast("TSHandler", globalTrafficShapingHandler);
                 // Idle check Handler
