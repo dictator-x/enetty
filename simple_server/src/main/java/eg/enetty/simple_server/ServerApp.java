@@ -17,6 +17,7 @@ import io.netty.handler.ipfilter.RuleBasedIpFilter;
 import io.netty.handler.ipfilter.IpSubnetFilterRule;
 import io.netty.handler.ipfilter.IpFilterRuleType;
 
+import io.netty.util.Version;
 import io.netty.util.concurrent.UnorderedThreadPoolEventExecutor;
 import io.netty.util.concurrent.DefaultThreadFactory;
 
@@ -30,10 +31,14 @@ import eg.enetty.simple_server.handler.ServerIdleCheckHandler;
 import eg.enetty.common.codec.OrderFrameEncoder;
 import eg.enetty.common.codec.OrderFrameDecoder;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class ServerApp
 {
     public static void main( String[] args ) throws InterruptedException, java.util.concurrent.ExecutionException {
         System.out.println("This is Server");
+        log.info("Using Netty Version: " + Version.identify().entrySet());
 
         ServerBootstrap serverBootstrap = new ServerBootstrap();
         serverBootstrap.channel(NioServerSocketChannel.class);
