@@ -19,7 +19,9 @@ ByteBuf:I
         use same JDK buffer
     2. setBytes vs getBytes
       setBytes: read bytes from this ByteBuf to outputting source
-      getBytes: read bytes from outputting source to this ByteBuf
+      getBytes: read bytes from inputting source to this ByteBuf
+    3. forEachByte
+      You can pass in a ByteProcessor to process each Byte
 
 AbstractByteBuf:A
   ResourceLeakDetector -> check memory leak
